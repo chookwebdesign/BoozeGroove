@@ -649,20 +649,25 @@ async function fetchItunesTracks(term, limit = 50) {
 // ─── Fetch a hardcoded song list individually ────────────────────────────────
 
 async function fetchHardcodedSongs(songList, genre) {
-  console.log(`[iTunes] Fetching ${genre} songs individually — searching`, songList.length, 'tracks...')
+  // Shuffle and cap at 35 songs to keep load times fast (~4s vs 15s+ for full lists)
+  // Different songs are picked each game since the list is shuffled fresh each time
+  const LIMIT = 35
+  const shuffled = [...songList].sort(() => Math.random() - 0.5).slice(0, LIMIT)
+
+  console.log(`[iTunes] Fetching ${genre} songs — searching ${shuffled.length} of ${songList.length} tracks...`)
 
   const results = []
   const BATCH = 10
 
-  for (let i = 0; i < songList.length; i += BATCH) {
-    const batch = songList.slice(i, i + BATCH)
+  for (let i = 0; i < shuffled.length; i += BATCH) {
+    const batch = shuffled.slice(i, i + BATCH)
     const batchResults = await Promise.all(batch.map(s => searchSong(s, genre)))
     results.push(...batchResults.filter(Boolean))
-    if (i + BATCH < songList.length) await new Promise(r => setTimeout(r, 300))
+    if (i + BATCH < shuffled.length) await new Promise(r => setTimeout(r, 150))
   }
 
   const found = results.length
-  console.log(`[iTunes] ${genre}: ${found}/${songList.length} songs found with previews`)
+  console.log(`[iTunes] ${genre}: ${found}/${shuffled.length} songs found with previews`)
   return results
 }
 
