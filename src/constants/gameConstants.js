@@ -30,7 +30,7 @@ export const GAME_MODE_META = {
   },
   [GAME_MODES.SUFFER]: {
     label: 'Suffer',
-    description: 'No scores — just chaos. Get it wrong and face a random dare or drinking penalty',
+    description: 'No scores. Get it wrong and face a random challenge.',
     icon: '💀',
     color: 'from-rose-600 to-red-900',
     borderColor: 'border-rose-600',
