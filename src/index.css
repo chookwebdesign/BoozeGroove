@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', sans-serif;
+    background-color: #080810;
+    color: #ffffff;
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: #080810;
+  }
+
+  #root {
+    min-height: 100dvh;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #12122a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #f97316;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Page container */
+  .page-container {
+    @apply min-h-screen bg-groove-bg px-4 pb-8 pt-4 max-w-lg mx-auto;
+  }
+
+  /* Section card */
+  .card {
+    @apply bg-groove-card rounded-2xl p-4 border border-groove-border;
+  }
+
+  /* Neon heading */
+  .neon-heading {
+    font-family: 'Fredoka One', cursive;
+    @apply text-white;
+    text-shadow: 0 0 30px rgba(249, 115, 22, 0.6);
+  }
+
+  /* Pill button base */
+  .pill-btn {
+    @apply px-4 py-2 rounded-full font-medium text-sm border transition-all duration-200 cursor-pointer select-none;
+    min-height: 40px;
+  }
+
+  .pill-btn-inactive {
+    @apply pill-btn border-groove-border bg-groove-card text-gray-400 hover:border-groove-orange hover:text-groove-orange;
+  }
+
+  .pill-btn-active {
+    @apply pill-btn border-groove-orange bg-groove-orange text-white;
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
+  }
+
+  .pill-btn-pink-active {
+    @apply pill-btn border-groove-pink bg-groove-pink text-white;
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+  }
+
+  /* Primary CTA button */
+  .btn-primary {
+    @apply w-full py-4 px-6 rounded-2xl font-display text-white text-xl font-bold
+           bg-gradient-to-r from-groove-orange to-orange-400
+           transition-all duration-150 active:scale-95 select-none cursor-pointer;
+    box-shadow: 0 4px 24px rgba(249, 115, 22, 0.4);
+    min-height: 60px;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 32px rgba(249, 115, 22, 0.6);
+  }
+
+  /* Secondary button */
+  .btn-secondary {
+    @apply w-full py-3 px-6 rounded-2xl font-medium text-white text-lg
+           bg-groove-card border border-groove-border
+           transition-all duration-150 active:scale-95 select-none cursor-pointer;
+    min-height: 52px;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply py-2 px-4 rounded-xl text-gray-400 text-sm
+           transition-all duration-150 active:scale-95 select-none cursor-pointer hover:text-white;
+    min-height: 40px;
+  }
+
+  /* Input field */
+  .input-field {
+    @apply w-full bg-groove-card border border-groove-border rounded-xl px-4 py-3
+           text-white placeholder-gray-500 outline-none
+           focus:border-groove-orange transition-colors;
+    min-height: 52px;
+  }
+
+  /* Section label */
+  .section-label {
+    font-family: 'Fredoka One', cursive;
+    @apply text-lg text-gray-300 mb-2;
+  }
+
+  /* Rules card */
+  .rules-card {
+    @apply bg-groove-cardLight border border-groove-border rounded-xl p-4 text-sm text-gray-300 space-y-1;
+  }
+
+  /* Page transition wrapper */
+  .page-enter {
+    animation: slideUp 0.35s ease-out;
+  }
+}
+
+@layer utilities {
+  /* Font display shorthand */
+  .font-display {
+    font-family: 'Fredoka One', cursive;
+  }
+
+  /* Gradient text */
+  .text-gradient-orange {
+    background: linear-gradient(135deg, #f97316, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-pink {
+    background: linear-gradient(135deg, #ec4899, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glow text */
+  .text-glow-orange {
+    text-shadow: 0 0 20px rgba(249, 115, 22, 0.8);
+  }
+
+  .text-glow-pink {
+    text-shadow: 0 0 20px rgba(236, 72, 153, 0.8);
+  }
+}
+
+/* Waveform bars (used in AudioPlayer) */
+.waveform-bar {
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to top, #f97316, #ec4899);
+  transform-origin: bottom;
+}
+
+/* Music note floating decorations */
+@keyframes floatNote {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+  50% { transform: translateY(-12px) rotate(8deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+}
+
+.float-note {
+  animation: floatNote 3s ease-in-out infinite;
+}
+
+/* Vinyl spin */
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.vinyl-spin {
+  animation: vinylSpin 4s linear infinite;
+}
+
+/* Active/playing vinyl spin (faster) */
+.vinyl-spin-fast {
+  animation: vinylSpin 1.5s linear infinite;
+}
+
+/* Drag over highlight */
+.drag-over {
+  border-color: #f97316 !important;
+  background-color: rgba(249, 115, 22, 0.1) !important;
+}
+
+/* Score pop animation */
+@keyframes scorePop {
+  0% { transform: scale(1) translateY(0); opacity: 1; }
+  50% { transform: scale(1.8) translateY(-10px); opacity: 1; }
+  100% { transform: scale(1) translateY(-20px); opacity: 0; }
+}
+
+.score-pop {
+  animation: scorePop 1s ease-out forwards;
+}
+
+/* Shake animation for wrong answers */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
