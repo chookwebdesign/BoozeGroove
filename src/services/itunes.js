@@ -2,7 +2,15 @@
  * iTunes Search API Service
  * No auth, no keys, works from any browser.
  * Returns 30-second MP3 preview clips.
+ *
+ * In production (Vercel) requests are routed through /api/itunes to avoid
+ * CORS restrictions. In local dev the iTunes API is called directly.
  */
+
+// Use our serverless proxy in production, direct iTunes in local dev
+const ITUNES_SEARCH = import.meta.env.DEV
+  ? 'https://itunes.apple.com/search'
+  : '/api/itunes'
 
 // ─── FIFA: hardcoded song list (searched individually on iTunes) ──────────────
 
@@ -575,7 +583,7 @@ const GENRE_QUERIES = {}
 
 async function searchSong({ title, artist }, genre = 'FIFA') {
   const term = `${title} ${artist}`
-  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&limit=5&country=gb`
+  const url = `${ITUNES_SEARCH}?term=${encodeURIComponent(term)}&media=music&entity=song&limit=5&country=gb`
 
   try {
     const res = await fetch(url)
@@ -612,7 +620,7 @@ async function searchSong({ title, artist }, genre = 'FIFA') {
 // ─── Fetch tracks from iTunes for a general search term ──────────────────────
 
 async function fetchItunesTracks(term, limit = 50) {
-  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&limit=${limit}&country=gb`
+  const url = `${ITUNES_SEARCH}?term=${encodeURIComponent(term)}&media=music&entity=song&limit=${limit}&country=gb`
 
   const res = await fetch(url)
   if (!res.ok) throw new Error(`iTunes fetch failed (${res.status})`)
