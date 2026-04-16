@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGame } from '../context/GameContext.jsx'
 import { ACTIONS } from '../context/GameContext.jsx'
@@ -30,6 +30,7 @@ export default function GamePage() {
   const [revealed, setRevealed] = useState(false)
   const [resultData, setResultData] = useState(null)
   const [showResult, setShowResult] = useState(false)
+  const answerGivenRef = useRef(false)
   const [showSkipConfirm, setShowSkipConfirm] = useState(false)
   const [showHint, setShowHint] = useState(false)
   const [timerActive, setTimerActive] = useState(false)
@@ -64,6 +65,7 @@ export default function GamePage() {
   }, [])
 
   const handleClipEnd = useCallback(() => {
+    if (answerGivenRef.current) return // answer already submitted, ignore late clip end
     setClipPhase('played')
     if (hasTimer) {
       setTimerSeconds(guessTimerSecs)
@@ -99,6 +101,7 @@ export default function GamePage() {
   }, [])
 
   function triggerResult({ result, playerName, drinks = 0, points = 0, sufferMessage = null, sufferTarget = null }) {
+    answerGivenRef.current = true
     setTimerActive(false)
     setResultData({ result, playerName, drinks, points, sufferMessage, sufferTarget })
     setShowResult(true)
@@ -156,6 +159,7 @@ export default function GamePage() {
   }
 
   const handleNextTurn = () => {
+    answerGivenRef.current = false
     setShowResult(false)
     setResultData(null)
     setRevealed(false)
@@ -242,6 +246,7 @@ export default function GamePage() {
           onClipStart={handleClipStart}
           onClipEnd={handleClipEnd}
           hideAlbumArt={isNoHost}
+          stopped={showResult}
         />
       </div>
 

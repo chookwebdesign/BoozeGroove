@@ -7,7 +7,7 @@ import WaveformAnimation from './WaveformAnimation.jsx'
  * - WaveformAnimation ALWAYS drives the clip timer as a fallback — if audio fails for
  *   any reason (autoplay blocked, CORS, null URL) the game still advances normally.
  */
-export default function AudioPlayer({ song, clipLength = 5, onClipStart, onClipEnd, hideAlbumArt = false }) {
+export default function AudioPlayer({ song, clipLength = 5, onClipStart, onClipEnd, hideAlbumArt = false, stopped = false }) {
   const [phase, setPhase] = useState('idle') // idle | playing | paused | finished
   const [playCount, setPlayCount] = useState(0)
   const [audioError, setAudioError] = useState(null)
@@ -35,6 +35,15 @@ export default function AudioPlayer({ song, clipLength = 5, onClipStart, onClipE
   useEffect(() => {
     return () => stopAudio()
   }, [])
+
+  // Stop audio immediately when parent signals an answer was given
+  useEffect(() => {
+    if (stopped) {
+      stopAudio()
+      clipEndFiredRef.current = true // prevent onClipEnd firing after answer
+      setPhase('idle')
+    }
+  }, [stopped])
 
   // Track remaining time so pause/resume works correctly
   const pausedAtRef    = useRef(null) // timestamp when paused
